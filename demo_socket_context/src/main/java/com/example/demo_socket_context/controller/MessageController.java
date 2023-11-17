@@ -24,7 +24,8 @@ public class MessageController {
     public List<Message> getAllChatFriends(@PathVariable int id){
         return messageService.initialStateAllChatFriends(id);
     }
-    //    http://localhost:8080/message/all/{id}
+
+//    http://localhost:8080/message/all/{id}
 //    trong hàm getAllMessages @PathVariable int id sẽ là người bên kia nhắn
 //    và @RequestBody Account principal sẽ là chủ thể của mình đang đăng nhập
     @PostMapping( "/all/{id}")
@@ -32,15 +33,18 @@ public class MessageController {
         String loggedInUsername = principal.getUsername();
         return messageService.getAllMessages(loggedInUsername, id);
     }
+
+//    @SendTo("/chat/user/queue/position-update")
+//    @MessageMapping("/chat")
     @PostMapping("/chat")
-    public void createPrivateChatMessages( @RequestBody Message message) throws Exception {
+    public void createPrivateChatMessages(@RequestBody Message message) throws Exception {
         if(message != null ) {
             Account account = accountService.findById(message.getFromUser().getId());
             message.setTime(LocalDateTime.now());
             message.setFromUser(account);
             messageService.save(message);
             template.convertAndSend("/chat/user/queue/position-update", message);
-            template.convertAndSend("/chat/user/queue/position-update", message);
+//            template.convertAndSend("/chat/user/queue/position-update", message);
             return;
         }
         throw new Exception("Error Create Message !");

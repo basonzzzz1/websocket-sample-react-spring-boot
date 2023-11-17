@@ -26,7 +26,7 @@ public class LoginController {
                 return ResponseEntity.ok(accountService.findByUsernameAndPassword(user.getUsername() , user.getPassword()));
             }
         }
-        throw new RuntimeException("cặc !");
+        throw new RuntimeException("error RuntimeException !");
     }
     @PostMapping("/fail")
     public String checkUser(@RequestBody Account user) { // login fail
